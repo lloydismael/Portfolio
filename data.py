@@ -37,10 +37,13 @@ ICONS = {
     "appliedskills":  "img/appliedskills.svg",
     "credential":     "img/credential.svg",   # generic fallback for any issuer
     "kubernetes":     "img/gitops.svg",        # (kept for compatibility)
-    # Certification-specific official icons:
-    "ms_expert":       "img/ms-expert.svg",
-    "ms_associate":    "img/ms-associate.svg",
-    "ms_fundamentals": "img/ms-fundamentals.svg",
+    # Official Microsoft Learn certification badges:
+    "ms_expert":       "img/ms-az305.svg",
+    "ms_associate":    "img/ms-az104.svg",
+    "ms_fundamentals": "img/ms-az900.svg",
+    "ms_az305":        "img/ms-az305.svg",
+    "ms_az104":        "img/ms-az104.svg",
+    "ms_az900":        "img/ms-az900.svg",
     "google":          "img/google.svg",
     "fabric":          "img/fabric.svg",
     "gitops":          "img/gitops.svg",
@@ -146,6 +149,7 @@ PROJECTS = [
         "url": "https://esgrequesthub.dreadops.site/accounts/login/",
         "tags": ["Web App", "Workflow", "Auth"],
         "icon": "django",
+        "favicon": "img/favicon-requesthub.png",
         "accent": "#0C4B33",
     },
     {
@@ -156,6 +160,7 @@ PROJECTS = [
         "url": "https://azureconsumption.clouditechsolution.com/",
         "tags": ["Azure", "Billing", "CSP"],
         "icon": "azure",
+        "favicon": "img/favicon-csp.png",
         "accent": "#0078D4",
     },
     {
@@ -166,6 +171,7 @@ PROJECTS = [
         "url": "https://ldp.clouditechsolution.com/",
         "tags": ["LMS", "App Service", "SSO"],
         "icon": "graduation",
+        "favicon": "img/favicon-ldp.svg",
         "accent": "#6D28D9",
     },
     {
@@ -176,6 +182,7 @@ PROJECTS = [
         "url": "https://putocopy.clouditechsolution.com/auth/login",
         "tags": ["Docker", "Self-hosted", "Azure VM"],
         "icon": "immich",
+        "favicon": "img/favicon-putocopy.png",
         "accent": "#4250AF",
     },
 ]
@@ -198,11 +205,11 @@ PROJECTS = [
 # =============================================================================
 CERTIFICATIONS = [
     {"name": "Azure Solutions Architect Expert", "issuer": "Microsoft Certified",
-     "badge": "AZ-305", "icon": "ms_expert"},
+     "badge": "AZ-305", "icon": "ms_az305"},
     {"name": "Azure Administrator Associate", "issuer": "Microsoft Certified",
-     "badge": "AZ-104", "icon": "ms_associate"},
+     "badge": "AZ-104", "icon": "ms_az104"},
     {"name": "Azure Fundamentals", "issuer": "Microsoft Certified",
-     "badge": "AZ-900", "icon": "ms_fundamentals"},
+     "badge": "AZ-900", "icon": "ms_az900"},
     {"name": "Google IT Support Professional Certificate", "issuer": "Google",
      "badge": "Professional Certificate", "icon": "google"},
     {"name": "GitHub Foundations", "issuer": "GitHub",

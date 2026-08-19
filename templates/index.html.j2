@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=20260820" />
   <script>
     // Set theme before paint to avoid flash
     (function () {
@@ -143,7 +143,7 @@
             </span>
           </div>
           <div class="top">
-            <span class="logo"><img src="{{ favicon_url(p.url) }}" alt="{{ p.name }} favicon"
+            <span class="logo"><img src="{{ p.favicon or favicon_url(p.url) }}" alt="{{ p.name }} favicon"
               data-fav2="{{ favicon_fallback(p.url) }}" data-icon="{{ icon_url(p.icon) }}"
               onerror="var a=this.getAttribute('data-fav2'),b=this.getAttribute('data-icon');
                        if(this.src!==a&&this.src.indexOf('duckduckgo')===-1){this.src=a;}
@@ -331,6 +331,6 @@
     </button>
   </div>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=20260819"></script>
 </body>
 </html>

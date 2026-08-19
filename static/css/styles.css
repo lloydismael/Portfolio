@@ -134,11 +134,11 @@ section { padding: 84px 0 20px; }
 }
 h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.15; }
 .section-head h2 { font-size: clamp(26px, 4vw, 38px); margin: 14px 0 6px; }
-.section-head p { color: var(--text-soft); max-width: 620px; margin: 0; }
+.section-head p { color: var(--text-soft); margin: 0; }
 
 /* ---------- Hero ---------- */
 .hero { padding-top: 60px; }
-.hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: center; }
+.hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
 .hero h1 { font-size: clamp(34px, 6vw, 60px); margin: 18px 0; }
 .hero h1 .grad {
   background: linear-gradient(120deg, var(--brand), var(--brand-2), var(--accent));
@@ -243,8 +243,8 @@ h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.15; }
 .project .top { padding-top: 4px; }
 .project .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .project .logo { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center;
-  background: var(--border); }
-.project .logo img { width: 30px; height: 30px; }
+  background: #fff; border: 1px solid var(--border); overflow: hidden; }
+.project .logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .project .arrow { color: var(--text-faint); transition: 0.25s; }
 .project:hover .arrow { color: var(--brand); transform: translate(3px, -3px); }
 .project h3 { font-size: 20px; margin: 0 0 2px; }
@@ -293,9 +293,9 @@ h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.15; }
 .cert { display: flex; align-items: flex-start; gap: 14px; padding: 18px 20px;
   border-radius: var(--radius); transition: 0.22s; }
 .cert:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--border-strong); }
-.cert-badge { width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center;
-  background: var(--surface-solid); border: 1px solid var(--border); flex-shrink: 0; overflow: hidden; }
-.cert-badge img { width: 32px; height: 32px; object-fit: contain; }
+.cert-badge { width: 52px; height: 52px; border-radius: 13px; display: grid; place-items: center;
+  background: #fff; border: 1px solid var(--border); flex-shrink: 0; overflow: hidden; padding: 2px; }
+.cert-badge img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .cert-meta { flex: 1; min-width: 0; }
 .cert-name { font-weight: 700; font-size: 15px; line-height: 1.28; margin-bottom: 6px; letter-spacing: -0.01em; }
 .cert-issuer { font-size: 13px; color: var(--text-faint); display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
@@ -392,3 +392,5 @@ footer { padding: 60px 0 40px; margin-top: 60px; }
 }
 img[data-invert] { }
 html[data-theme="dark"] img[data-invert="true"] { filter: invert(1) brightness(1.6); }
+/* Cert badges stay white, so keep official marks in their original colors. */
+html[data-theme="dark"] .cert-badge img[data-invert="true"] { filter: none; }
