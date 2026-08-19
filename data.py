@@ -17,6 +17,7 @@ ICONS = {
     "csharp":        _DEV + "csharp/csharp-original.svg",
     "python":        _DEV + "python/python-original.svg",
     "powershell":    _DEV + "powershell/powershell-original.svg",
+    "postgresql":    _DEV + "postgresql/postgresql-original.svg",
     "git":           _DEV + "git/git-original.svg",
     "github":        _DEV + "github/github-original.svg",       # monochrome -> inverts in dark
     "visualstudio":  _DEV + "visualstudio/visualstudio-original.svg",
@@ -25,7 +26,12 @@ ICONS = {
     "linkedin":      _DEV + "linkedin/linkedin-original.svg",
     # Bundled locally (not on Devicon):
     "powerplatform":  "img/powerplatform.svg",
+    "powerautomate":  "img/powerautomate.svg",
     "azurefunctions": "img/azurefunctions.svg",
+    "foundry":        "img/foundry.png",
+    "copilotstudio":  "img/copilotstudio.svg",
+    "githubcopilot":  "img/githubcopilot.svg",
+    "azurecli":       "img/azurecli.svg",
     "immich":         "img/immich.svg",
     "graduation":     "img/graduation.svg",
     "microsoft365":   "img/microsoft365.svg",
@@ -64,7 +70,7 @@ ICON_FALLBACK = {
     "ama":   "ama_local",
 }
 # Icons that are near-black and need inverting in dark mode:
-INVERT = {"github", "django", "jenkins"}
+INVERT = {"github", "django", "jenkins", "githubcopilot"}
 
 
 CONTACT = {
@@ -92,16 +98,16 @@ PROFILE = {
     "initials": "LI",
     "role": "Systems Support Engineer · Cloud & DevOps",
     "hero_title": "Azure Solutions Architect Expert",
-    "tagline": "I build and operate cloud-native platforms on Azure — from CSP billing tools "
-               "to containerized web apps — with a bias for automation, clean delivery and cost efficiency.",
+    "tagline": "I build and operate cloud-native platforms on Azure, from CSP billing tools "
+               "to containerized web apps, with a bias for automation, clean delivery and cost efficiency.",
     "short_bio": (
         "Systems Support Engineer and Microsoft Cloud Solution Provider (CSP) partner based in "
-        "Makati City. I design Azure infrastructure, modernize .NET apps, wire CI/CD with Azure "
-        "DevOps and GitHub, and ship Docker workloads to App Service and VMs — with pragmatic "
+        "Makati City. I design Azure infrastructure, modernize Python and Django apps, wire CI/CD with Azure "
+        "DevOps and GitHub, and ship Docker workloads to App Service and VMs, with pragmatic "
         "architecture, traceable automation, and honest cloud spend."
     ),
     "who_i_help": (
-        "I help founders, IT teams and Microsoft partners — in Makati and remotely — stand up "
+        "I help founders, IT teams and Microsoft partners, in Makati and remotely, stand up "
         "Azure platforms, automate delivery, and keep production operations and billing under control."
     ),
     "stats": [
@@ -116,29 +122,32 @@ SKILLS = [
     {
         "group": "Cloud & Infrastructure",
         "items": [
-            {"name": "Microsoft Azure", "icon": "azure"},
-            {"name": "Azure DevOps",    "icon": "azuredevops"},
-            {"name": "Docker",          "icon": "docker"},
-            {"name": "Azure Functions", "icon": "azurefunctions"},
+            {"name": "Microsoft Azure",        "icon": "azure"},
+            {"name": "Azure DevOps",           "icon": "azuredevops"},
+            {"name": "Docker",                 "icon": "docker"},
+            {"name": "Azure AI Foundry",       "icon": "foundry"},
+            {"name": "M365 Copilot Studio",    "icon": "copilotstudio"},
         ],
     },
     {
         "group": "Development",
         "items": [
-            {"name": ".NET",       "icon": "dotnet"},
-            {"name": "C#",         "icon": "csharp"},
+            {"name": "PostgreSQL", "icon": "postgresql"},
+            {"name": "Django",     "icon": "django"},
             {"name": "Python",     "icon": "python"},
             {"name": "PowerShell", "icon": "powershell"},
+            {"name": "Azure CLI",  "icon": "azurecli"},
         ],
     },
     {
         "group": "Tooling & Platforms",
         "items": [
-            {"name": "Git",             "icon": "git"},
-            {"name": "GitHub",          "icon": "github"},
-            {"name": "Visual Studio",   "icon": "visualstudio"},
-            {"name": "VS Code",         "icon": "vscode"},
-            {"name": "Power Platform",  "icon": "powerplatform"},
+            {"name": "Git",              "icon": "git"},
+            {"name": "GitHub",           "icon": "github"},
+            {"name": "Visual Studio",    "icon": "visualstudio"},
+            {"name": "VS Code",          "icon": "vscode"},
+            {"name": "GitHub Copilot",   "icon": "githubcopilot"},
+            {"name": "Power Automate",   "icon": "powerautomate"},
         ],
     },
 ]
