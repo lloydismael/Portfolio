@@ -1,10 +1,42 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/img/*", "/css/*", "/js/*"]
+    "exclude": [
+      "/img/*",
+      "/css/*",
+      "/js/*",
+      "/robots.txt",
+      "/sitemap.xml",
+      "/favicon.ico",
+      "/site.webmanifest"
+    ]
   },
   "routes": [
-    { "route": "/api/contact", "methods": ["POST"] }
+    { "route": "/api/contact", "methods": ["POST"] },
+    {
+      "route": "/index.html",
+      "headers": { "Cache-Control": "public, max-age=0, must-revalidate" }
+    },
+    {
+      "route": "/robots.txt",
+      "headers": { "Cache-Control": "public, max-age=3600" }
+    },
+    {
+      "route": "/sitemap.xml",
+      "headers": { "Cache-Control": "public, max-age=3600" }
+    },
+    {
+      "route": "/css/*",
+      "headers": { "Cache-Control": "public, max-age=31536000, immutable" }
+    },
+    {
+      "route": "/js/*",
+      "headers": { "Cache-Control": "public, max-age=31536000, immutable" }
+    },
+    {
+      "route": "/img/*",
+      "headers": { "Cache-Control": "public, max-age=31536000, immutable" }
+    }
   ],
   "responseOverrides": {
     "404": { "rewrite": "/index.html" }
@@ -15,6 +47,7 @@
     "Referrer-Policy": "strict-origin-when-cross-origin"
   },
   "mimeTypes": {
-    ".svg": "image/svg+xml"
+    ".svg": "image/svg+xml",
+    ".webmanifest": "application/manifest+json"
   }
 }

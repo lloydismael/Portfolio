@@ -72,4 +72,11 @@ email client via `mailto:` — so the form always works.
 - The SMS (`sms:`) and email (`mailto:`) links open the visitor's native apps.
 - Dev logos load from the Devicon CDN; Power Platform, Azure Functions, Immich and the
   graduation icon are bundled locally in `static/img/` so nothing renders broken.
-- Custom domain: map `www.clouditechsolution.com` (or a subdomain) in the SWA **Custom domains** blade.
+- Canonical domain is **https://lloydismael.com**. Map both the apex and `www` in the SWA **Custom domains** blade, then redirect `www` → apex so Search Console does not split equity.
+- Product demos (CSP calculator, LDP, Puto Copy) stay on `*.clouditechsolution.com` and are not the homepage.
+
+## 5) Search Console + GA4 (after first production deploy)
+1. In [Google Search Console](https://search.google.com/search-console), add a **Domain** property for `lloydismael.com` (DNS TXT is preferred). The HTML meta tag is already templated: paste the token into `SITE["gsc_verification"]` in `data.py` if you cannot use DNS.
+2. Submit `https://lloydismael.com/sitemap.xml` and request indexing of `/`.
+3. Create a GA4 property for `lloydismael.com`, paste the Measurement ID into `SITE["ga4_id"]` in `data.py` (replace `G-XXXXXXXXXX`), then rebuild and redeploy. The gtag snippet is omitted until that placeholder is replaced.
+4. Confirm URL Inspection shows canonical `https://lloydismael.com/` and that `/robots.txt` and `/sitemap.xml` are not rewritten to the homepage.

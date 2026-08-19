@@ -12,8 +12,10 @@ Usage:
 """
 import argparse
 import datetime as _dt
+import json
 import shutil
 from pathlib import Path
+from xml.sax.saxutils import escape as xml_escape
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
@@ -61,6 +63,151 @@ def shot_fallback(url: str, w: int = 1280, h: int = 860) -> str:
             f"&embed=screenshot.url&viewport.width={w}&viewport.height={h}")
 
 
+def _canonical() -> str:
+    return data.SITE["canonical"].rstrip("/")
+
+
+def json_ld() -> str:
+    """One @graph for WebSite + Person + ProfessionalService + FAQPage."""
+    origin = _canonical()
+    person_id = f"{origin}/#person"
+    website_id = f"{origin}/#website"
+    service_id = f"{origin}/#service"
+    graph = [
+        {
+            "@type": "WebSite",
+            "@id": website_id,
+            "url": f"{origin}/",
+            "name": data.SITE["site_name"],
+            "description": data.SITE["description"],
+            "inLanguage": "en",
+            "publisher": {"@id": person_id},
+        },
+        {
+            "@type": "Person",
+            "@id": person_id,
+            "name": data.PROFILE["name"],
+            "jobTitle": data.PROFILE["role"],
+            "url": f"{origin}/",
+            "image": data.AVATAR["fallback"],
+            "email": f"mailto:{data.CONTACT['email']}",
+            "telephone": data.CONTACT["phone_e164"],
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Makati City",
+                "addressCountry": "PH",
+            },
+            "sameAs": [
+                data.CONTACT["github_url"],
+                data.CONTACT["linkedin_url"],
+            ],
+            "worksFor": {"@id": service_id},
+        },
+        {
+            "@type": "ProfessionalService",
+            "@id": service_id,
+            "name": f"{data.PROFILE['name']} — Azure & DevOps consulting",
+            "url": f"{origin}/",
+            "image": f"{origin}{data.SITE['og_image']}",
+            "description": data.SITE["description"],
+            "areaServed": ["PH", "Remote"],
+            "serviceType": [
+                "Azure consulting",
+                "DevOps automation",
+                "Cloud architecture",
+            ],
+            "founder": {"@id": person_id},
+        },
+        {
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": item["q"],
+                    "acceptedAnswer": {"@type": "Answer", "text": item["a"]},
+                }
+                for item in data.FAQ
+            ],
+        },
+    ]
+    return json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False)
+
+
+def write_robots(dest: Path) -> None:
+    dest.write_text(
+        "User-agent: *\n"
+        "Allow: /\n"
+        f"Sitemap: {_canonical()}/sitemap.xml\n",
+        encoding="utf-8",
+    )
+
+
+def write_sitemap(dest: Path, lastmod: str) -> None:
+    origin = _canonical()
+    dest.write_text(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        "  <url>\n"
+        f"    <loc>{xml_escape(origin)}/</loc>\n"
+        f"    <lastmod>{xml_escape(lastmod)}</lastmod>\n"
+        "    <changefreq>weekly</changefreq>\n"
+        "    <priority>1.0</priority>\n"
+        "  </url>\n"
+        "</urlset>\n",
+        encoding="utf-8",
+    )
+
+
+def ensure_og_image() -> None:
+    """Generate a 1200x630 social card if one is not already checked in."""
+    out = STATIC / "img" / "og-image.png"
+    if out.exists():
+        return
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        print("! Pillow not installed — skip og-image.png (pip install pillow)")
+        return
+
+    w, h = 1200, 630
+    img = Image.new("RGB", (w, h), "#070b16")
+    draw = ImageDraw.Draw(img)
+    draw.rectangle((0, 0, 18, h), fill="#0078d4")
+    draw.ellipse((820, -180, 1380, 380), fill="#0b1a3a")
+    draw.ellipse((-80, 360, 420, 860), fill="#1a1130")
+
+    def _font(size: int) -> ImageFont.ImageFont:
+        for name in ("segoeui.ttf", "arial.ttf", "calibri.ttf"):
+            try:
+                return ImageFont.truetype(name, size)
+            except OSError:
+                continue
+        return ImageFont.load_default()
+
+    title_font = _font(54)
+    sub_font = _font(28)
+    small_font = _font(22)
+    draw.text((72, 150), "Lloyd Christian M. Ismael", fill="#eef2ff", font=title_font)
+    draw.text((72, 230), "Azure Cloud & DevOps Engineer", fill="#3ea0ff", font=sub_font)
+    draw.text((72, 300), "Makati City  ·  Consulting  ·  CSP Partner", fill="#b3bdd4", font=small_font)
+    draw.text((72, 520), "lloydismael.com", fill="#94a3b8", font=small_font)
+
+    avatar_path = STATIC / "img" / "avatar-linkedin.png"
+    if avatar_path.exists():
+        av = Image.open(avatar_path).convert("RGBA")
+        size = 220
+        side = min(av.size)
+        left = (av.width - side) // 2
+        top = max(0, (av.height - side) // 5)
+        av = av.crop((left, top, left + side, top + side)).resize((size, size), Image.Resampling.LANCZOS)
+        mask = Image.new("L", (size, size), 0)
+        ImageDraw.Draw(mask).rounded_rectangle((0, 0, size, size), radius=36, fill=255)
+        img.paste(av, (880, 200), mask)
+
+    img.save(out, "PNG", optimize=True)
+    print(f"✓ Generated {out.name} ({w}x{h})")
+
+
 def build() -> None:
     env = Environment(
         loader=FileSystemLoader(str(TEMPLATES)),
@@ -74,6 +221,9 @@ def build() -> None:
     env.globals["icon_fallback"] = lambda key: icon_url(
         getattr(data, "ICON_FALLBACK", {}).get(key, "credential"))
 
+    ensure_og_image()
+    today = _dt.date.today().isoformat()
+
     template = env.get_template("index.html.j2")
     html = template.render(
         site=data.SITE,
@@ -84,8 +234,11 @@ def build() -> None:
         certifications=data.CERTIFICATIONS,
         education=data.EDUCATION,
         consulting=data.CONSULTING,
+        how_i_work=data.HOW_I_WORK,
+        faq=data.FAQ,
         avatar=data.AVATAR,
         invert=data.INVERT,
+        json_ld=json_ld(),
         year=_dt.date.today().year,
     )
 
@@ -102,6 +255,13 @@ def build() -> None:
     favicon = STATIC / "img" / "favicon.ico"
     if favicon.exists():
         shutil.copy(favicon, PUBLIC / "favicon.ico")
+
+    write_robots(PUBLIC / "robots.txt")
+    write_sitemap(PUBLIC / "sitemap.xml", today)
+
+    manifest = STATIC / "site.webmanifest"
+    if manifest.exists():
+        shutil.copy(manifest, PUBLIC / "site.webmanifest")
 
     # Config for Azure Static Web Apps (fallback routing + headers)
     swa = ROOT / "staticwebapp.config.json"

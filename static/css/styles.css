@@ -79,6 +79,23 @@ body {
 
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
 
+.skip-link {
+  position: absolute; left: 16px; top: -48px; z-index: 100;
+  padding: 10px 16px; border-radius: 999px; background: var(--brand); color: #fff;
+  font-weight: 700; text-decoration: none; box-shadow: var(--shadow);
+}
+.skip-link:focus { top: 16px; }
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+.btn:focus-visible, .icon-btn:focus-visible, .nav-links a:focus-visible,
+.fab:focus-visible, .fab-item:focus-visible, .project:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+
 /* Glass primitive */
 .glass {
   background: var(--surface);
@@ -105,6 +122,7 @@ body {
   padding: 8px 14px; border-radius: 999px; transition: 0.2s;
 }
 .nav-links a:hover { color: var(--text); background: var(--border); }
+.nav-links a[aria-current="true"] { color: var(--text); background: var(--border); }
 .nav-actions { display: flex; gap: 8px; align-items: center; }
 
 .icon-btn {
@@ -135,6 +153,7 @@ section { padding: 84px 0 20px; }
 h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.15; }
 .section-head h2 { font-size: clamp(26px, 4vw, 38px); margin: 14px 0 6px; }
 .section-head p { color: var(--text-soft); margin: 0; }
+.who-help { margin-top: 14px !important; }
 
 /* ---------- Hero ---------- */
 .hero { padding-top: 60px; }
@@ -249,6 +268,9 @@ h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.15; }
 .project:hover .arrow { color: var(--brand); transform: translate(3px, -3px); }
 .project h3 { font-size: 20px; margin: 0 0 2px; }
 .project .sub { color: var(--brand); font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+.project .outcome {
+  margin: -4px 0 12px; font-size: 13px; font-weight: 600; color: var(--text);
+}
 .project p { color: var(--text-soft); font-size: 14px; margin: 0 0 16px; }
 .tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .tag { font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: 999px;
@@ -391,6 +413,32 @@ footer { padding: 60px 0 40px; margin-top: 60px; }
 .form-note { font-size: 13px; color: var(--text-faint); margin-top: 10px; }
 .direct-links { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
 
+/* ---------- How I work ---------- */
+.process-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;
+}
+.process { padding: 22px; border-radius: var(--radius); }
+.process-step {
+  display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: 0.08em;
+  color: var(--brand); margin-bottom: 10px;
+}
+.process h3 { margin: 0 0 8px; font-size: 18px; }
+.process p { margin: 0; color: var(--text-soft); font-size: 14px; }
+
+/* ---------- FAQ ---------- */
+.faq-list { display: flex; flex-direction: column; gap: 12px; }
+.faq-item { border-radius: var(--radius); padding: 4px 20px 4px; }
+.faq-item summary {
+  cursor: pointer; font-weight: 650; padding: 16px 0; list-style: none;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+"; float: right; color: var(--brand); font-weight: 700;
+}
+.faq-item[open] summary::after { content: "–"; }
+.faq-item p { margin: 0 0 16px; color: var(--text-soft); font-size: 15px; }
+
 /* Reveal on scroll (only hide when JS is available; visible by default otherwise) */
 .js .reveal { opacity: 0; transform: translateY(24px); transition: 0.7s cubic-bezier(.16,.84,.44,1); }
 .js .reveal.in { opacity: 1; transform: none; }
@@ -405,7 +453,7 @@ footer { padding: 60px 0 40px; margin-top: 60px; }
 }
 @media (max-width: 960px) {
   .hero-grid, .two-col, .contact-grid { grid-template-columns: 1fr; }
-  .skill-groups, .projects-grid, .pricing, .gh-stats, .cert-grid { grid-template-columns: 1fr; }
+  .skill-groups, .projects-grid, .pricing, .gh-stats, .cert-grid, .process-grid { grid-template-columns: 1fr; }
   .nav-links { display: none; }
   .edu-banner { flex-direction: column; text-align: center; }
 }

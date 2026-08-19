@@ -89,7 +89,26 @@
     if (!e.target.closest("#fabWrap")) wrap.classList.remove("open");
   });
 
+  /* ---------------- Analytics (no-op unless gtag exists) ---------------- */
+  function track(name, params) {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", name, params || {});
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+    const cta = e.target.closest("[data-cta]");
+    if (cta) {
+      track("select_content", { content_type: "cta", item_id: cta.getAttribute("data-cta") });
+    }
+    const project = e.target.closest("a.project");
+    if (project) {
+      track("click", { event_category: "outbound", event_label: project.href, outbound: true });
+    }
+  });
+
   /* ---------------- Smooth-scroll active nav ---------------- */
+  const navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener("click", (e) => {
       const id = a.getAttribute("href");
@@ -99,6 +118,23 @@
       }
     });
   });
+  if (navLinks.length && "IntersectionObserver" in window) {
+    const setCurrent = (id) => {
+      navLinks.forEach((link) => {
+        if (link.getAttribute("href") === id) link.setAttribute("aria-current", "true");
+        else link.removeAttribute("aria-current");
+      });
+    };
+    const sectionIo = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) setCurrent("#" + en.target.id);
+      });
+    }, { rootMargin: "-40% 0px -50% 0px", threshold: 0 });
+    navLinks.forEach((link) => {
+      const target = document.querySelector(link.getAttribute("href"));
+      if (target) sectionIo.observe(target);
+    });
+  }
 
   /* ---------------- Reveal on scroll ---------------- */
   const io = new IntersectionObserver((entries) => {
@@ -121,15 +157,18 @@
           body: JSON.stringify(data),
         });
         if (!res.ok) throw new Error("bad");
-        status.textContent = "✓ Thanks! Your message was received.";
+        status.textContent = "Thanks — I will reply with next steps within one business day.";
         form.reset();
+        track("generate_lead", { method: "contact_form" });
+        track("form_submit", { form_id: "contact" });
       } catch (err) {
         // Fallback for local preview / no API: open the user's mail client
         const email = document.body.getAttribute("data-email");
         const subject = encodeURIComponent(`Portfolio enquiry from ${data.name || "website"}`);
         const body = encodeURIComponent(`${data.message || ""}\n\nFrom: ${data.name || ""} (${data.email || ""})`);
         window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-        status.textContent = "Opening your email app…";
+        status.textContent = "Opening your email app so you can send the same note…";
+        track("form_submit", { form_id: "contact", method: "mailto_fallback" });
       }
     });
   }

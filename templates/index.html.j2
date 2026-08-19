@@ -5,17 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ site.title }}</title>
   <meta name="description" content="{{ site.description }}" />
+  <meta name="author" content="{{ profile.name }}" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="{{ site.canonical }}/" />
   <meta property="og:title" content="{{ site.title }}" />
   <meta property="og:description" content="{{ site.description }}" />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ site.canonical }}/" />
+  <meta property="og:locale" content="{{ site.locale }}" />
+  <meta property="og:site_name" content="{{ site.site_name }}" />
+  <meta property="og:image" content="{{ site.canonical }}{{ site.og_image }}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="{{ site.og_image_alt }}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ site.title }}" />
+  <meta name="twitter:description" content="{{ site.description }}" />
+  <meta name="twitter:image" content="{{ site.canonical }}{{ site.og_image }}" />
+  <meta name="twitter:image:alt" content="{{ site.og_image_alt }}" />
+  <meta name="theme-color" content="{{ site.theme_color_light }}" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="{{ site.theme_color_dark }}" media="(prefers-color-scheme: dark)" />
+  {% if site.gsc_verification %}
+  <meta name="google-site-verification" content="{{ site.gsc_verification }}" />
+  {% endif %}
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png" />
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
-  <meta property="og:image" content="img/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=20260820b" />
+  <link rel="stylesheet" href="css/styles.css?v=20260820seo" />
   <script>
     // Set theme before paint to avoid flash
     (function () {
@@ -25,13 +45,24 @@
       document.documentElement.classList.add("js");
     })();
   </script>
+  {% if site.ga4_id and not site.ga4_id.endswith('XXXXXXXXXX') %}
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.ga4_id }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{ site.ga4_id }}');
+  </script>
+  {% endif %}
+  <script type="application/ld+json">{{ json_ld | safe }}</script>
 </head>
 <body data-gh="{{ contact.github }}" data-email="{{ contact.email }}">
 
+  <a class="skip-link" href="#main">Skip to content</a>
   <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
 
   <!-- ================= NAV ================= -->
-  <nav class="nav glass">
+  <nav class="nav glass" aria-label="Primary">
     <div class="brand">
       <span class="dot">{{ profile.initials }}</span>
       <span>{{ profile.name.split(' ')[0] }} {{ profile.name.split(' ')[-1] }}</span>
@@ -46,11 +77,11 @@
     </div>
     <div class="nav-actions">
       <button id="themeToggle" class="icon-btn" aria-label="Toggle theme"></button>
-      <a href="#contact" class="btn btn-primary">Let’s talk</a>
+      <a href="#contact" class="btn btn-primary" data-cta="nav-talk">Let’s talk</a>
     </div>
   </nav>
 
-  <div class="wrap">
+  <main id="main" class="wrap">
 
     <!-- ================= HERO ================= -->
     <header class="hero" id="top">
@@ -60,8 +91,8 @@
           <h1>Hi, I’m {{ profile.name.split(' ')[0] }} —<br /><span class="grad">{{ profile.role.split('·')[0].strip() }}</span></h1>
           <p class="lede">{{ profile.tagline }}</p>
           <div class="hero-cta">
-            <a href="#projects" class="btn btn-primary">View my work</a>
-            <a href="#consulting" class="btn btn-ghost">Consulting options</a>
+            <a href="#projects" class="btn btn-primary" data-cta="hero-work">View my work</a>
+            <a href="#consulting" class="btn btn-ghost" data-cta="hero-consulting">Consulting options</a>
           </div>
           <div class="hero-stats">
             {% for s in profile.stats %}
@@ -71,7 +102,8 @@
         </div>
         <div class="hero-card glass reveal">
           <div class="avatar">
-            <img src="{{ avatar.primary }}" alt="{{ profile.name }}" referrerpolicy="no-referrer"
+            <img src="{{ avatar.primary }}" alt="{{ profile.name }}" width="96" height="96"
+                 fetchpriority="high" referrerpolicy="no-referrer"
                  onerror="if(this.src!=='{{ avatar.fallback }}'){this.src='{{ avatar.fallback }}';}else{this.style.display='none';this.parentNode.classList.add('mono');}" />
             <span class="mono-fallback">{{ profile.initials }}</span>
           </div>
@@ -97,6 +129,9 @@
         <span class="eyebrow">About</span>
         <h2>Cloud engineering, end to end</h2>
         <p>{{ profile.short_bio }}</p>
+        {% if profile.who_i_help %}
+        <p class="who-help">{{ profile.who_i_help }}</p>
+        {% endif %}
       </div>
     </section>
 
@@ -114,7 +149,7 @@
           <div class="skill-list">
             {% for it in g["items"] %}
             <div class="skill">
-              <img src="{{ icon_url(it.icon) }}" alt="{{ it.name }}" loading="lazy"
+              <img src="{{ icon_url(it.icon) }}" alt="{{ it.name }}" width="28" height="28" loading="lazy"
                    {% if it.icon in invert %}data-invert="true"{% endif %} />
               <span>{{ it.name }}</span>
             </div>
@@ -140,7 +175,8 @@
             <span class="preview-skeleton"><span class="spinner"></span>Capturing live preview…</span>
             <img class="preview-img" src="{{ shot_url(p.url) }}"
                  data-shot="{{ shot_url(p.url) }}" data-fallback="{{ shot_fallback(p.url) }}"
-                 data-tries="0" alt="Live preview of {{ p.name }} landing page" loading="lazy" />
+                 data-tries="0" alt="Live preview of {{ p.name }} landing page"
+                 width="1280" height="250" loading="lazy" />
             <span class="preview-badge"><span class="live-dot"></span>Live</span>
             <span class="preview-visit">Open site
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
@@ -159,6 +195,7 @@
           <h3>{{ p.name }}</h3>
           <div class="sub">{{ p.subtitle }}</div>
           <p>{{ p.description }}</p>
+          {% if p.outcome %}<p class="outcome">{{ p.outcome }}</p>{% endif %}
           <div class="tags">{% for t in p.tags %}<span class="tag">{{ t }}</span>{% endfor %}</div>
         </a>
         {% endfor %}
@@ -174,7 +211,7 @@
       </div>
       <div class="gh-wrap glass reveal">
         <div class="gh-head">
-          <img class="gh-avatar" src="https://github.com/{{ contact.github }}.png" alt="{{ contact.github }}"
+          <img width="52" height="52" loading="lazy" class="gh-avatar" src="https://github.com/{{ contact.github }}.png" alt="{{ contact.github }}"
                referrerpolicy="no-referrer"
                onerror="this.onerror=null;this.src='{{ icon_url('github') }}';this.setAttribute('data-invert','true');this.classList.add('is-logo');" />
           <div class="gh-id">
@@ -189,13 +226,14 @@
         <div class="gh-chart">
           <!-- Original GitHub contribution calendar (native green tiles) -->
           <img id="ghChart" alt="{{ contact.github }} GitHub contribution graph" loading="lazy"
+               width="663" height="104"
                src="https://ghchart.rshah.org/216e39/{{ contact.github }}" />
         </div>
         <div class="gh-stats">
-          <img id="ghStats" alt="GitHub stats" loading="lazy"
+          <img id="ghStats" alt="GitHub stats" loading="lazy" width="495" height="195"
                src="https://github-readme-stats.vercel.app/api?username={{ contact.github }}&show_icons=true&hide_border=true&count_private=true&theme=transparent"
                onerror="this.style.display='none'" />
-          <img id="ghLangs" alt="Top languages" loading="lazy"
+          <img id="ghLangs" alt="Top languages" loading="lazy" width="300" height="195"
                src="https://github-readme-stats.vercel.app/api/top-langs/?username={{ contact.github }}&layout=compact&hide_border=true&theme=transparent"
                onerror="this.style.display='none'" />
         </div>
@@ -237,6 +275,24 @@
       </div>
     </section>
 
+    <!-- ================= HOW I WORK ================= -->
+    <section id="how-i-work">
+      <div class="section-head reveal">
+        <span class="eyebrow">Process</span>
+        <h2>How I work</h2>
+        <p>A short, repeatable path from first conversation to a running Azure platform.</p>
+      </div>
+      <ol class="process-grid">
+        {% for step in how_i_work %}
+        <li class="process glass reveal">
+          <span class="process-step">{{ step.step }}</span>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.text }}</p>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+
     <!-- ================= CONSULTING ================= -->
     <section id="consulting">
       <div class="section-head reveal">
@@ -256,8 +312,25 @@
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>{{ f }}</li>
             {% endfor %}
           </ul>
-          <a href="#contact" class="btn {% if plan.featured %}btn-primary{% else %}btn-ghost{% endif %}">Get started</a>
+          <a href="#contact" class="btn {% if plan.featured %}btn-primary{% else %}btn-ghost{% endif %}" data-cta="consult-{{ plan.name|lower|replace(' ', '-') }}">Get started</a>
         </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section id="faq">
+      <div class="section-head reveal">
+        <span class="eyebrow">FAQ</span>
+        <h2>Questions teams usually ask</h2>
+        <p>Straight answers about Azure consulting, CSP support and how we start.</p>
+      </div>
+      <div class="faq-list">
+        {% for item in faq %}
+        <details class="faq-item glass reveal">
+          <summary>{{ item.q }}</summary>
+          <p>{{ item.a }}</p>
+        </details>
         {% endfor %}
       </div>
     </section>
@@ -266,8 +339,8 @@
     <section id="contact">
       <div class="section-head reveal">
         <span class="eyebrow">Get in touch</span>
-        <h2>Let’s build something</h2>
-        <p>Send a message below, or reach me directly by SMS or email.</p>
+        <h2>Start an Azure or DevOps engagement</h2>
+        <p>Tell me about the workload, timeline and constraints. I typically reply within one business day.</p>
       </div>
       <div class="contact-grid">
         <div class="contact-card glass reveal">
@@ -276,7 +349,7 @@
             <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required /></div>
             <div class="field"><label for="message">Message</label><textarea id="message" name="message" rows="5" required></textarea></div>
             <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Send message</button>
-            <div class="form-note" id="formStatus">Runs on an Azure Functions (Python) endpoint. In local preview it opens your email app.</div>
+            <div class="form-note" id="formStatus">I read every message. You will get a reply with next steps — or your email app opens if the API is offline.</div>
           </form>
         </div>
         <div class="contact-card glass reveal">
@@ -298,9 +371,11 @@
         </div>
       </div>
     </section>
+  </main>
 
     <!-- ================= FOOTER ================= -->
     <footer>
+      <div class="wrap">
       <div class="foot glass reveal">
         <div>
           <strong>{{ profile.name }}</strong>
@@ -315,8 +390,8 @@
           </a>
         </div>
       </div>
+      </div>
     </footer>
-  </div>
 
   <!-- ============ FLOATING CHAT ============ -->
   <div class="fab-wrap" id="fabWrap">
@@ -335,6 +410,6 @@
     </button>
   </div>
 
-  <script src="js/main.js?v=20260819"></script>
+  <script src="js/main.js?v=20260820seo"></script>
 </body>
 </html>
