@@ -264,8 +264,30 @@ h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.15; }
 .gh-id strong { font-size: 16px; letter-spacing: -0.01em; }
 .gh-handle { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-soft); font-weight: 500; }
 .gh-head a { margin-left: auto; }
-.gh-chart { width: 100%; border-radius: var(--radius-sm); overflow: hidden; }
-.gh-chart img { width: 100%; display: block; }
+.gh-chart {
+  width: 100%;
+  padding: 16px 14px 10px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid var(--border);
+}
+.gh-chart img {
+  width: 100%;
+  display: block;
+  height: auto;
+  min-height: 128px;
+  filter: contrast(1.05);
+}
+html[data-theme="dark"] .gh-chart {
+  background: #0d1117;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+/* ghchart is a light image (white empty cells, dark labels). Invert in dark
+   mode so labels stay readable and empty days become dark tiles. */
+html[data-theme="dark"] .gh-chart img {
+  filter: invert(1) hue-rotate(180deg) saturate(1.35) brightness(1.08) contrast(1.08);
+}
 .gh-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
 .gh-stats img { width: 100%; border-radius: var(--radius-sm); }
 

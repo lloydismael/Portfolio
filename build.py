@@ -98,6 +98,11 @@ def build() -> None:
     shutil.copytree(STATIC / "js", PUBLIC / "js")
     shutil.copytree(STATIC / "img", PUBLIC / "img")
 
+    # Browsers request /favicon.ico at the site root by default.
+    favicon = STATIC / "img" / "favicon.ico"
+    if favicon.exists():
+        shutil.copy(favicon, PUBLIC / "favicon.ico")
+
     # Config for Azure Static Web Apps (fallback routing + headers)
     swa = ROOT / "staticwebapp.config.json"
     if swa.exists():

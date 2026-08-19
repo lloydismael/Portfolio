@@ -102,7 +102,7 @@ PROFILE = {
         "traceable automation, and keeping cloud spend honest."
     ),
     "stats": [
-        {"value": "5+",  "label": "Years in IT & Cloud"},
+        {"value": "9+",  "label": "Years in IT & Cloud"},
         {"value": "4",   "label": "Platforms shipped"},
         {"value": "CSP", "label": "Microsoft Partner"},
         {"value": "24/7","label": "Automated pipelines"},
