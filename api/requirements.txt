@@ -1,0 +1,3 @@
+azure-functions
+# Optional: uncomment to enable email delivery via Azure Communication Services
+# azure-communication-email

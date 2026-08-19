@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A6FB0"/><stop offset="1" stop-color="#134775"/></linearGradient></defs>
+  <path d="M16 3l9 3v8c0 6-4 9.5-9 12-5-2.5-9-6-9-12V6l9-3z" fill="url(#a)"/>
+  <path d="M16 8.5l-4.5 8h3l-1.2 5 5-7h-3l3-6z" fill="#50E6FF"/>
+  <rect x="6" y="21.5" width="20" height="4.5" rx="1" fill="#134775"/>
+  <text x="16" y="24.8" font-family="Arial" font-size="2.7" font-weight="700" fill="#fff" text-anchor="middle">ASSOCIATE</text>
+</svg>

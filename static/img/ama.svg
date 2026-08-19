@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <path d="M16 3l10 3v9c0 7-4 11-10 14C10 26 6 22 6 15V6l10-3z" fill="#F4F6FB"/>
+  <path d="M16 3l10 3v9c0 7-4 11-10 14C10 26 6 22 6 15V6l10-3z" fill="none" stroke="#7A1E2B" stroke-width="1.4"/>
+  <text x="16" y="18.5" font-family="Georgia, serif" font-size="9" font-weight="700" fill="#B01E2E" text-anchor="middle">AMA</text>
+</svg>

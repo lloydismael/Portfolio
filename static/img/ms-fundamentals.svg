@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3C8DD6"/><stop offset="1" stop-color="#1E6BB0"/></linearGradient></defs>
+  <path d="M16 3l9 3v8c0 6-4 9.5-9 12-5-2.5-9-6-9-12V6l9-3z" fill="url(#f)"/>
+  <path d="M16 8.5l-4.5 8h3l-1.2 5 5-7h-3l3-6z" fill="#C3F1FF"/>
+  <rect x="4.5" y="21.5" width="23" height="4.5" rx="1" fill="#1E6BB0"/>
+  <text x="16" y="24.7" font-family="Arial" font-size="2.4" font-weight="700" fill="#fff" text-anchor="middle">FUNDAMENTALS</text>
+</svg>

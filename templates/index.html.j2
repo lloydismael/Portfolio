@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ site.title }}</title>
+  <meta name="description" content="{{ site.description }}" />
+  <meta property="og:title" content="{{ site.title }}" />
+  <meta property="og:description" content="{{ site.description }}" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script>
+    // Set theme before paint to avoid flash
+    (function () {
+      var t = localStorage.getItem("theme") ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", t);
+      document.documentElement.classList.add("js");
+    })();
+  </script>
+</head>
+<body data-gh="{{ contact.github }}" data-email="{{ contact.email }}">
+
+  <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <!-- ================= NAV ================= -->
+  <nav class="nav glass">
+    <div class="brand">
+      <span class="dot">{{ profile.initials }}</span>
+      <span>{{ profile.name.split(' ')[0] }} {{ profile.name.split(' ')[-1] }}</span>
+    </div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#github">GitHub</a>
+      <a href="#consulting">Consulting</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button id="themeToggle" class="icon-btn" aria-label="Toggle theme"></button>
+      <a href="#contact" class="btn btn-primary">Let’s talk</a>
+    </div>
+  </nav>
+
+  <div class="wrap">
+
+    <!-- ================= HERO ================= -->
+    <header class="hero" id="top">
+      <div class="hero-grid">
+        <div class="reveal">
+          <span class="eyebrow">● Available for consulting</span>
+          <h1>Hi, I’m {{ profile.name.split(' ')[0] }} —<br /><span class="grad">{{ profile.role.split('·')[0].strip() }}</span></h1>
+          <p class="lede">{{ profile.tagline }}</p>
+          <div class="hero-cta">
+            <a href="#projects" class="btn btn-primary">View my work</a>
+            <a href="#consulting" class="btn btn-ghost">Consulting options</a>
+          </div>
+          <div class="hero-stats">
+            {% for s in profile.stats %}
+            <div class="stat glass"><div class="v">{{ s.value }}</div><div class="l">{{ s.label }}</div></div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="hero-card glass reveal">
+          <div class="avatar">
+            <img src="{{ avatar.primary }}" alt="{{ profile.name }}" referrerpolicy="no-referrer"
+                 onerror="if(this.src!=='{{ avatar.fallback }}'){this.src='{{ avatar.fallback }}';}else{this.style.display='none';this.parentNode.classList.add('mono');}" />
+            <span class="mono-fallback">{{ profile.initials }}</span>
+          </div>
+          <h3>{{ profile.name }}</h3>
+          <div class="muted">{{ profile.hero_title }}</div>
+          <div class="muted" style="margin-top:6px;">📍 {{ contact.location }}</div>
+          <div class="chips">
+            <span class="chip">Azure</span><span class="chip">DevOps</span>
+            <span class="chip">.NET</span><span class="chip">Docker</span>
+            <span class="chip">CSP Partner</span>
+          </div>
+          <a href="{{ contact.linkedin_url }}" target="_blank" rel="noopener" class="btn btn-ghost linkedin-btn">
+            <img src="{{ icon_url('linkedin') }}" width="18" height="18" alt="" />
+            View LinkedIn profile
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================= ABOUT ================= -->
+    <section id="about">
+      <div class="section-head reveal">
+        <span class="eyebrow">About</span>
+        <h2>Cloud engineering, end to end</h2>
+        <p>{{ profile.short_bio }}</p>
+      </div>
+    </section>
+
+    <!-- ================= SKILLS ================= -->
+    <section id="skills">
+      <div class="section-head reveal">
+        <span class="eyebrow">Tech stack</span>
+        <h2>Tools I work with</h2>
+        <p>Official technology logos across the stack I use daily.</p>
+      </div>
+      <div class="skill-groups">
+        {% for g in skills %}
+        <div class="skill-card glass reveal">
+          <h3>{{ g.group }}</h3>
+          <div class="skill-list">
+            {% for it in g["items"] %}
+            <div class="skill">
+              <img src="{{ icon_url(it.icon) }}" alt="{{ it.name }}" loading="lazy"
+                   {% if it.icon in invert %}data-invert="true"{% endif %} />
+              <span>{{ it.name }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- ================= PROJECTS ================= -->
+    <section id="projects">
+      <div class="section-head reveal">
+        <span class="eyebrow">Portfolio</span>
+        <h2>Selected projects</h2>
+        <p>Production platforms I designed, built and deployed. Click any card to open it live.</p>
+      </div>
+      <div class="projects-grid">
+        {% for p in projects %}
+        <a class="project glass reveal" href="{{ p.url }}" target="_blank" rel="noopener noreferrer"
+           style="--proj-accent: {{ p.accent }};">
+          <div class="preview">
+            <span class="preview-skeleton"><span class="spinner"></span>Capturing live preview…</span>
+            <img class="preview-img" src="{{ shot_url(p.url) }}"
+                 data-shot="{{ shot_url(p.url) }}" data-fallback="{{ shot_fallback(p.url) }}"
+                 data-tries="0" alt="Live preview of {{ p.name }} landing page" loading="lazy" />
+            <span class="preview-badge"><span class="live-dot"></span>Live</span>
+            <span class="preview-visit">Open site
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </span>
+          </div>
+          <div class="top">
+            <span class="logo"><img src="{{ favicon_url(p.url) }}" alt="{{ p.name }} favicon"
+              data-fav2="{{ favicon_fallback(p.url) }}" data-icon="{{ icon_url(p.icon) }}"
+              onerror="var a=this.getAttribute('data-fav2'),b=this.getAttribute('data-icon');
+                       if(this.src!==a&&this.src.indexOf('duckduckgo')===-1){this.src=a;}
+                       else if(this.src!==b){this.src=b;}" /></span>
+            <span class="arrow" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </span>
+          </div>
+          <h3>{{ p.name }}</h3>
+          <div class="sub">{{ p.subtitle }}</div>
+          <p>{{ p.description }}</p>
+          <div class="tags">{% for t in p.tags %}<span class="tag">{{ t }}</span>{% endfor %}</div>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- ================= GITHUB ================= -->
+    <section id="github">
+      <div class="section-head reveal">
+        <span class="eyebrow">Open source</span>
+        <h2>GitHub activity</h2>
+        <p>Live contribution graph and stats for <strong>@{{ contact.github }}</strong>.</p>
+      </div>
+      <div class="gh-wrap glass reveal">
+        <div class="gh-head">
+          <img class="gh-avatar" src="https://github.com/{{ contact.github }}.png" alt="{{ contact.github }}"
+               referrerpolicy="no-referrer"
+               onerror="this.onerror=null;this.src='{{ icon_url('github') }}';this.setAttribute('data-invert','true');this.classList.add('is-logo');" />
+          <div class="gh-id">
+            <strong>{{ profile.name }}</strong>
+            <span class="gh-handle">
+              <img src="{{ icon_url('github') }}" width="14" height="14" data-invert="true" alt="" />
+              @{{ contact.github }}
+            </span>
+          </div>
+          <a href="{{ contact.github_url }}" target="_blank" rel="noopener" class="btn btn-ghost">View profile</a>
+        </div>
+        <div class="gh-chart">
+          <!-- Original GitHub contribution calendar (native green tiles) -->
+          <img id="ghChart" alt="{{ contact.github }} GitHub contribution graph" loading="lazy"
+               src="https://ghchart.rshah.org/216e39/{{ contact.github }}" />
+        </div>
+        <div class="gh-stats">
+          <img id="ghStats" alt="GitHub stats" loading="lazy"
+               src="https://github-readme-stats.vercel.app/api?username={{ contact.github }}&show_icons=true&hide_border=true&count_private=true&theme=transparent"
+               onerror="this.style.display='none'" />
+          <img id="ghLangs" alt="Top languages" loading="lazy"
+               src="https://github-readme-stats.vercel.app/api/top-langs/?username={{ contact.github }}&layout=compact&hide_border=true&theme=transparent"
+               onerror="this.style.display='none'" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CERTS + EDUCATION ============ -->
+    <section id="credentials">
+      <div class="section-head reveal">
+        <span class="eyebrow">Credentials</span>
+        <h2>Certifications & education</h2>
+      </div>
+      <div class="cert-grid">
+        {% for c in certifications %}
+        <div class="cert glass">
+          <span class="cert-badge"><img src="{{ icon_url(c.icon) }}" alt="{{ c.name }}"
+            {% if c.icon in invert %}data-invert="true"{% endif %}
+            data-fb="{{ icon_fallback(c.icon) }}"
+            onerror="var f=this.getAttribute('data-fb'); if(f&&this.src!==f){this.src=f;}" /></span>
+          <div class="cert-meta">
+            <div class="cert-name">{{ c.name }}</div>
+            <div class="cert-issuer">{{ c.issuer }}<span class="cert-pill">{{ c.badge }}</span></div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="edu-banner reveal">
+        {% for e in education %}
+        <span class="edu-logo"><img src="{{ icon_url(e.icon) }}" alt="{{ e.school }}"
+          data-fb="{{ icon_fallback(e.icon) }}"
+          onerror="var f=this.getAttribute('data-fb'); if(f&&this.src!==f){this.src=f;}" /></span>
+        <div class="edu-meta">
+          <span class="edu-eyebrow">Education</span>
+          <div class="edu-school">{{ e.school }}</div>
+          <div class="edu-detail">{{ e.detail }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- ================= CONSULTING ================= -->
+    <section id="consulting">
+      <div class="section-head reveal">
+        <span class="eyebrow">Work with me</span>
+        <h2>Consulting engagements</h2>
+        <p>Flexible ways to work together — scaled to the depth of support you need.</p>
+      </div>
+      <div class="pricing">
+        {% for plan in consulting %}
+        <div class="plan glass reveal {% if plan.featured %}featured{% endif %}">
+          {% if plan.featured %}<span class="flag">Recommended</span>{% endif %}
+          <h3>{{ plan.name }}</h3>
+          <div class="price">{{ plan.price }}</div>
+          <div class="bestfor">{{ plan.best_for }}</div>
+          <ul>
+            {% for f in plan.features %}
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>{{ f }}</li>
+            {% endfor %}
+          </ul>
+          <a href="#contact" class="btn {% if plan.featured %}btn-primary{% else %}btn-ghost{% endif %}">Get started</a>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section id="contact">
+      <div class="section-head reveal">
+        <span class="eyebrow">Get in touch</span>
+        <h2>Let’s build something</h2>
+        <p>Send a message below, or reach me directly by SMS or email.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card glass reveal">
+          <form id="contactForm">
+            <div class="field"><label for="name">Name</label><input id="name" name="name" required /></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required /></div>
+            <div class="field"><label for="message">Message</label><textarea id="message" name="message" rows="5" required></textarea></div>
+            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Send message</button>
+            <div class="form-note" id="formStatus">Runs on an Azure Functions (Python) endpoint. In local preview it opens your email app.</div>
+          </form>
+        </div>
+        <div class="contact-card glass reveal">
+          <h3>Reach me directly</h3>
+          <div class="direct-links">
+            <a class="fab-item glass" href="sms:{{ contact.phone_e164 }}">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Text me — {{ contact.phone_display }}
+            </a>
+            <a class="fab-item glass" href="mailto:{{ contact.email }}">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Email me — {{ contact.email }}
+            </a>
+            <a class="fab-item glass" href="{{ contact.linkedin_url }}" target="_blank" rel="noopener">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+              Connect on LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+      <div class="foot glass reveal">
+        <div>
+          <strong>{{ profile.name }}</strong>
+          <div><small>© {{ year }} · Built with Python + Azure Static Web Apps</small></div>
+        </div>
+        <div class="socials">
+          <a class="icon-btn" href="{{ contact.github_url }}" target="_blank" rel="noopener" aria-label="GitHub">
+            <img src="{{ icon_url('github') }}" width="18" height="18" data-invert="true" alt="GitHub" />
+          </a>
+          <a class="icon-btn" href="mailto:{{ contact.email }}" aria-label="Email">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ============ FLOATING CHAT ============ -->
+  <div class="fab-wrap" id="fabWrap">
+    <div class="fab-menu">
+      <a class="fab-item glass" href="sms:{{ contact.phone_e164 }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        SMS
+      </a>
+      <a class="fab-item glass" href="mailto:{{ contact.email }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email
+      </a>
+    </div>
+    <button class="fab" id="fabBtn" aria-label="Contact me">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    </button>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
