@@ -48,7 +48,7 @@ python build.py --serve
 2. In the Azure Portal → **Create a resource → Static Web App**.
 3. Connect the repo. When asked for build details, either use the included
    workflow or set: **App location** `public`, **Api location** `api`, **Output location** empty.
-4. Azure adds a deployment secret (for this app: `AZURE_STATIC_WEB_APPS_API_TOKEN_CALM_RIVER_0BD571400`) and the workflow deploys on every push.
+4. Azure adds a deployment secret (for this app: `AZURE_STATIC_WEB_APPS_API_TOKEN_CALM_RIVER_0BD571400`) and the workflow deploys on every push. Keep the generated workflow filename (`azure-static-web-apps-calm-river-0bd571400.yml`); Azure OIDC auth requires that exact name.
 
 **Option B — SWA CLI:**
 ```bash
