@@ -35,12 +35,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=20260820fit" />
+  <link rel="stylesheet" href="css/styles.css?v=20260821ambient2" />
   <script>
     // Set theme before paint to avoid flash
     (function () {
-      var t = localStorage.getItem("theme") ||
-        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      var t = localStorage.getItem("theme") === "dark" ? "dark" : "light";
       document.documentElement.setAttribute("data-theme", t);
       document.documentElement.classList.add("js");
     })();
@@ -59,7 +58,7 @@
 <body data-gh="{{ contact.github }}" data-email="{{ contact.email }}">
 
   <a class="skip-link" href="#main">Skip to content</a>
-  <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 
   <!-- ================= NAV ================= -->
   <nav class="nav glass" aria-label="Primary">
@@ -76,8 +75,19 @@
       <a href="#contact">Contact</a>
     </div>
     <div class="nav-actions">
-      <button id="themeToggle" class="icon-btn" aria-label="Toggle theme"></button>
+      <button id="navToggle" class="icon-btn nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="primaryLinks">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <button id="themeToggle" class="icon-btn" type="button" aria-label="Switch to dark theme" aria-pressed="false"></button>
       <a href="#contact" class="btn btn-primary" data-cta="nav-talk">Let’s talk</a>
+    </div>
+    <div class="mobile-nav glass" id="primaryLinks" hidden>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#github">GitHub</a>
+      <a href="#consulting">Consulting</a>
+      <a href="#contact">Contact</a>
     </div>
   </nav>
 
@@ -398,7 +408,7 @@
 
   <!-- ============ FLOATING CHAT ============ -->
   <div class="fab-wrap" id="fabWrap">
-    <div class="fab-menu">
+    <div class="fab-menu" id="fabMenu" hidden>
       <a class="fab-item glass" href="sms:{{ contact.phone_e164 }}">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         SMS
@@ -408,11 +418,11 @@
         Email
       </a>
     </div>
-    <button class="fab" id="fabBtn" aria-label="Contact me">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    <button class="fab" id="fabBtn" aria-label="Open contact options" aria-expanded="false" aria-controls="fabMenu">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
     </button>
   </div>
 
-  <script src="js/main.js?v=20260820seo"></script>
+  <script src="js/main.js?v=20260821lightglass"></script>
 </body>
 </html>

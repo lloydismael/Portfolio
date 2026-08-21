@@ -96,7 +96,7 @@ AVATAR = {
 PROFILE = {
     "name": "Lloyd Christian M. Ismael",
     "initials": "LI",
-    "role": "Systems Support Engineer · Cloud & DevOps",
+    "role": "Solution Architech",
     "hero_title": "Azure Solutions Architect Expert",
     "tagline": "I build and operate cloud-native platforms on Azure, from CSP billing tools "
                "to containerized web apps, with a bias for automation, clean delivery and cost efficiency.",

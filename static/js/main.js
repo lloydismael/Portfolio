@@ -4,14 +4,17 @@
   /* ---------------- Theme ---------------- */
   const root = document.documentElement;
   const stored = localStorage.getItem("theme");
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  setTheme(stored || (prefersDark ? "dark" : "light"));
+  setTheme(stored === "dark" ? "dark" : "light");
 
   function setTheme(mode) {
     root.setAttribute("data-theme", mode);
     localStorage.setItem("theme", mode);
     const btn = document.getElementById("themeToggle");
-    if (btn) btn.innerHTML = mode === "dark" ? sun() : moon();
+    if (btn) {
+      btn.innerHTML = mode === "dark" ? sun() : moon();
+      btn.setAttribute("aria-pressed", String(mode === "dark"));
+      btn.setAttribute("aria-label", mode === "dark" ? "Switch to light theme" : "Switch to dark theme");
+    }
     syncGitHubTheme(mode);
   }
 
@@ -81,12 +84,105 @@
   }
   initPreviews();
 
-  /* ---------------- Floating chat menu ---------------- */
+  /* ---------------- Pointer-responsive liquid glass ---------------- */
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  let glassFrame = 0;
+  let glassTarget = null;
+  let glassPoint = null;
+
+  document.addEventListener("pointermove", function (e) {
+    if (!finePointer.matches) return;
+    const glass = e.target.closest(".glass");
+    if (!glass) {
+      if (glassTarget) glassTarget.classList.remove("glass-active");
+      glassTarget = null;
+      return;
+    }
+    if (glassTarget && glassTarget !== glass) glassTarget.classList.remove("glass-active");
+    glassTarget = glass;
+    glassPoint = { x: e.clientX, y: e.clientY };
+    if (glassFrame) return;
+    glassFrame = requestAnimationFrame(function () {
+      glassFrame = 0;
+      if (!glassTarget || !glassPoint) return;
+      const rect = glassTarget.getBoundingClientRect();
+      glassTarget.style.setProperty("--glass-x", `${glassPoint.x - rect.left}px`);
+      glassTarget.style.setProperty("--glass-y", `${glassPoint.y - rect.top}px`);
+      glassTarget.classList.add("glass-active");
+    });
+  }, { passive: true });
+
+  document.addEventListener("pointerout", function (e) {
+    const glass = e.target.closest(".glass");
+    if (!glass || glass.contains(e.relatedTarget)) return;
+    glass.classList.remove("glass-active");
+    if (glassTarget === glass) glassTarget = null;
+  });
+
+  /* ---------------- Expandable navigation and contact menus ---------------- */
+  const setExpanded = (button, panel, open) => {
+    if (!button || !panel) return;
+    button.setAttribute("aria-expanded", String(open));
+    button.setAttribute("aria-label", open
+      ? (button.id === "navToggle" ? "Close navigation" : "Close contact options")
+      : (button.id === "navToggle" ? "Open navigation" : "Open contact options"));
+    panel.hidden = !open;
+  };
+
+  const closeMobileNav = (restoreFocus) => {
+    const button = document.getElementById("navToggle");
+    const panel = document.getElementById("primaryLinks");
+    const nav = document.querySelector(".nav");
+    if (!button || !panel || !nav) return;
+    nav.classList.remove("menu-open");
+    setExpanded(button, panel, false);
+    if (restoreFocus) button.focus();
+  };
+
+  const closeFab = (restoreFocus) => {
+    const wrap = document.getElementById("fabWrap");
+    const button = document.getElementById("fabBtn");
+    const panel = document.getElementById("fabMenu");
+    if (!wrap || !button || !panel) return;
+    wrap.classList.remove("open");
+    setExpanded(button, panel, false);
+    if (restoreFocus) button.focus();
+  };
+
   document.addEventListener("click", function (e) {
     const wrap = document.getElementById("fabWrap");
-    if (!wrap) return;
-    if (e.target.closest("#fabBtn")) { wrap.classList.toggle("open"); return; }
-    if (!e.target.closest("#fabWrap")) wrap.classList.remove("open");
+    const fabButton = document.getElementById("fabBtn");
+    const fabMenu = document.getElementById("fabMenu");
+    const navButton = document.getElementById("navToggle");
+    const mobileNav = document.getElementById("primaryLinks");
+    const nav = document.querySelector(".nav");
+
+    if (e.target.closest("#fabBtn") && wrap && fabButton && fabMenu) {
+      const open = fabButton.getAttribute("aria-expanded") !== "true";
+      wrap.classList.toggle("open", open);
+      setExpanded(fabButton, fabMenu, open);
+      return;
+    }
+    if (wrap && !e.target.closest("#fabWrap")) closeFab(false);
+
+    if (e.target.closest("#navToggle") && navButton && mobileNav && nav) {
+      const open = navButton.getAttribute("aria-expanded") !== "true";
+      nav.classList.toggle("menu-open", open);
+      setExpanded(navButton, mobileNav, open);
+      return;
+    }
+    if (e.target.closest("#primaryLinks a")) closeMobileNav(false);
+    else if (nav && !e.target.closest(".nav")) closeMobileNav(false);
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (document.getElementById("fabBtn")?.getAttribute("aria-expanded") === "true") closeFab(true);
+    if (document.getElementById("navToggle")?.getAttribute("aria-expanded") === "true") closeMobileNav(true);
+  });
+
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 960) closeMobileNav(false);
   });
 
   /* ---------------- Analytics (no-op unless gtag exists) ---------------- */
@@ -114,7 +210,11 @@
       const id = a.getAttribute("href");
       if (id.length > 1) {
         const el = document.querySelector(id);
-        if (el) { e.preventDefault(); el.scrollIntoView({ behavior: "smooth" }); }
+        if (el) {
+          e.preventDefault();
+          const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+        }
       }
     });
   });
@@ -137,10 +237,23 @@
   }
 
   /* ---------------- Reveal on scroll ---------------- */
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  const revealItems = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) {
+          en.target.classList.add("in");
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: "0px 0px -5% 0px" });
+    revealItems.forEach((el, index) => {
+      el.style.setProperty("--reveal-delay", `${Math.min(index % 4, 3) * 55}ms`);
+      io.observe(el);
+    });
+  } else {
+    revealItems.forEach((el) => el.classList.add("in"));
+  }
 
   /* ---------------- Contact form ---------------- */
   const form = document.getElementById("contactForm");
