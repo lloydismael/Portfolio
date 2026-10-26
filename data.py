@@ -159,7 +159,7 @@ PROJECTS = [
         "description": "A ticketing / request-management portal that centralizes ESG-related "
                        "submissions, approvals and tracking with role-based access.",
         "outcome": "One role-based intake for ESG requests instead of scattered email threads.",
-        "url": "https://esgrequesthub.dreadops.site/accounts/login/",
+        "url": "http://esgrequesthub.com/",
         "tags": ["Web App", "Workflow", "Auth"],
         "icon": "django",
         "favicon": "img/favicon-requesthub.png",
@@ -171,7 +171,7 @@ PROJECTS = [
         "description": "A CSP billing portal that estimates and reconciles Azure consumption, "
                        "helping partners track customer spend and Azure Credit Offers.",
         "outcome": "Partners can estimate and reconcile Azure spend and credit offers in one portal.",
-        "url": "https://azureconsumption.clouditechsolution.com/",
+        "url": "https://azurecsp.clouditechsolution.com/",
         "tags": ["Azure", "Billing", "CSP"],
         "icon": "azure",
         "favicon": "img/favicon-csp.png",
@@ -200,6 +200,18 @@ PROJECTS = [
         "icon": "immich",
         "favicon": "img/favicon-putocopy.png",
         "accent": "#4250AF",
+    },
+    {
+        "name": "Seller Development Request Form",
+        "subtitle": "Learning session request portal",
+        "description": "A seller development portal for planning learning sessions, submitting "
+                       "requests and reviewing request history.",
+        "outcome": "Learning session requests and request history in one portal.",
+        "url": "https://sellerdevelopmentrf.clouditechsolution.com/",
+        "tags": ["Web App", "Learning", "Requests"],
+        "icon": "graduation",
+        "favicon": "https://sellerdevelopmentrf.clouditechsolution.com/favicon.svg",
+        "accent": "#0F766E",
     },
 ]
 

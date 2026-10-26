@@ -277,7 +277,7 @@ def serve() -> None:
     import os
 
     os.chdir(PUBLIC)
-    port = 8000
+    port = 8005
     handler = http.server.SimpleHTTPRequestHandler
     with socketserver.TCPServer(("", port), handler) as httpd:
         print(f"Serving at http://localhost:{port}  (Ctrl+C to stop)")
