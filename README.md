@@ -8,7 +8,7 @@ contact form.
 - ✨ Liquid-glass, professional design with **light/dark mode** (remembers your choice)
 - 🧩 **Official technology icons** (Devicon + bundled SVGs) across skills, certs & education
 - 📈 Live **GitHub activity** for [`lloydismael`](https://github.com/lloydismael) (contribution graph + stats, theme-synced)
-- 🗂️ **Projects**: Request Hub, Azure CSP Calculator, Learning Development Portal, Puto Copy, Seller Development Request Form
+- 🗂️ **Projects**: Request Hub, Azure CSP Calculator, Learning Development Portal, Puto Copy, Seller Development Request Form, PesoPath
 - 💼 **Consulting tiers** (Advisory → Build & Deploy → Managed Partner)
 - 💬 **Floating chat button** + contact form → message directly via **SMS or email**
 - 🐍 100% Python build pipeline, no Node build step

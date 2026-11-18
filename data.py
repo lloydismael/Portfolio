@@ -213,6 +213,18 @@ PROJECTS = [
         "favicon": "https://sellerdevelopmentrf.clouditechsolution.com/favicon.svg",
         "accent": "#0F766E",
     },
+    {
+        "name": "PesoPath",
+        "subtitle": "Personal budget & debt tracker",
+        "description": "An installable app for managing a budget, planning debt payoff, and "
+                       "keeping track of installment payments.",
+        "outcome": "Track your finances offline without sending your data off your device.",
+        "url": "https://pesopath.clouditechsolution.com/",
+        "tags": ["PWA", "Personal Finance", "Offline"],
+        "icon": "credential",
+        "favicon": "https://pesopath.clouditechsolution.com/icons/icon-192.png",
+        "accent": "#16A34A",
+    },
 ]
 
 # =============================================================================
